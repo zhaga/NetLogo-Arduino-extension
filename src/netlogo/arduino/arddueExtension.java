@@ -58,6 +58,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
         //still testing
         primManager.addPrimitive( "motor",   new arddueMotor() ) ;
         primManager.addPrimitive( "config",  new arddueConfig() ) ;
+        primManager.addPrimitive( "get-baud-rate", new getBaudRate() );
     }
 	
     public void unload()
@@ -113,6 +114,16 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     ////////////////////////////////////////////////////////////////////////////
     //Primitive classes
     ////////////////////////////////////////////////////////////////////////////
+    public static class getBaudRate extends DefaultReporter
+    {
+		public Object report(Argument args[], Context context)
+			throws ExtensionException , org.nlogo.api.LogoException
+		{
+			return String.valueOf(controller.BAUD_RATE);
+		}
+    }
+    
+    
     public static class arddueListPorts extends DefaultReporter
     {
 		public Syntax getSyntax() {

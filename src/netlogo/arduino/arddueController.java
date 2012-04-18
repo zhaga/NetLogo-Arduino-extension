@@ -26,6 +26,8 @@ public class arddueController { //implements SerialPortEventListener{
     final String sError   = "E:";   //Error packet header
     final String sEndPack = ";";    //end packet character
     final String sDelim   = ",";    //packet delimiter character
+    
+    public static final int BAUD_RATE = 9600;
 
     public boolean debugging = true;
     public String chunk2;
@@ -177,7 +179,7 @@ public class arddueController { //implements SerialPortEventListener{
                 e.printStackTrace();
             }
             try {
-                port.setSerialPortParams(9600,//    57600,        //28800,// 9600,         //115200,
+                port.setSerialPortParams(BAUD_RATE,   //9600 //    57600,        //28800,// 9600,         //115200,
                         SerialPort.DATABITS_8,
                         SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
