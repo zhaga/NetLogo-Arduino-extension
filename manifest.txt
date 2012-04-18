@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Extension-Name: arddue
-Class-Manager: edu.nwu.ccl.nlogo.extensions.arddue.arddueExtension
-NetLogo-Extension-API-Version: 4.1
+Class-Manager: netlogo.arddueExtension
+NetLogo-Extension-API-Version: 5.0

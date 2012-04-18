@@ -437,9 +437,9 @@ public class arddueController { //implements SerialPortEventListener{
 
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-l")) {
-                ListIterator portIterator = serialPorts().listIterator();
+                ListIterator<String> portIterator = serialPorts().listIterator();
                 while (portIterator.hasNext()) {
-                    System.out.println((String) portIterator.next());
+                    System.out.println( portIterator.next() );
                 }
                 System.exit(0);
             } else if (args[i].equals("-p")) {

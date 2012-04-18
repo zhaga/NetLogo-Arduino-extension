@@ -1,17 +1,10 @@
+package edu.nwu.ccl.nlogo.extensions.arddue;
 
 /** (c) 2004 Uri Wilensky. See README.txt for terms of use. **/
 
-package edu.nwu.ccl.nlogo.extensions.arddue;
 
-import org.nlogo.api.LogoList;
-import org.nlogo.api.Syntax;
-import org.nlogo.api.Context;
-import org.nlogo.api.DefaultCommand;
-import org.nlogo.api.DefaultReporter;
-import org.nlogo.api.Argument; 
-import org.nlogo.api.Context;
-import org.nlogo.api.ExtensionException;
 import org.nlogo.api.*;
+
 import java.net.URL;
 import java.io.File;
 import java.util.Iterator;
@@ -123,14 +116,17 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueListPorts extends DefaultReporter
     {
 		public Syntax getSyntax() {
-			return Syntax.reporterSyntax(Syntax.TYPE_LIST);
+			return Syntax.reporterSyntax(Syntax.ListType()); //in 4.x API syntax this is .TYPE_LIST); 
 		}
 		
 		public Object report(Argument args[], Context context)
 			throws ExtensionException , org.nlogo.api.LogoException
 		{
 			try  {
-				return new org.nlogo.api.LogoList( arddueController.availablePorts() ) ;
+				LogoListBuilder lb = new LogoListBuilder();
+				lb.addAll(arddueController.availablePorts());
+				return lb.toLogoList();
+				//in 4.x API syntax this is return new org.nlogo.api.LogoList( arddueController.availablePorts() ) ;
 			}
 			catch ( java.lang.NoClassDefFoundError e )
 			{
@@ -147,7 +143,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueOpen extends DefaultCommand    {
 
         public Syntax getSyntax() {
-            int[] right = { Syntax.TYPE_STRING } ;
+        	int[] right = { Syntax.StringType() }; //in 4.x API syntax this is.TYPE_STRING } ;
             return Syntax.commandSyntax(right);
         }
 
@@ -198,7 +194,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueRead extends DefaultReporter
     {
         public Syntax getSyntax() {
-            int ret   = Syntax.TYPE_STRING;
+        	int ret   = Syntax.StringType(); //in 4.x API syntax this isTYPE_STRING;
             return Syntax.reporterSyntax(ret);
         }
 
@@ -206,7 +202,12 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
             throws ExtensionException , org.nlogo.api.LogoException
         {
             try  {
-                return new org.nlogo.api.LogoList( controller.getSerialData() ) ;
+            	//TODO: ask Zach why he chose to return this data in a list, rather than as a StringType, as suggested in Syntax. CB 4/3/12
+            	// WHY, in fact, does this work :) ?
+            	LogoListBuilder lb = new LogoListBuilder();
+				lb.add( controller.getSerialData() );
+				return lb.toLogoList();
+            	//in 4.x API syntax this is return new org.nlogo.api.LogoList( controller.getSerialData() ) ;
             }
             catch ( java.lang.NoClassDefFoundError e )
             {
@@ -224,7 +225,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     {
 
         public Syntax getSyntax() {
-            int[] right = { Syntax.TYPE_STRING } ;
+        	int[] right = { Syntax.StringType() }; //in 4.x API syntax this is .TYPE_STRING } ;
             return Syntax.commandSyntax(right);
         }
 
@@ -241,7 +242,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class ardduePauseThread extends DefaultCommand
     {
         public Syntax getSyntax() {
-            int[] right = { Syntax.TYPE_STRING } ;
+        	int[] right = { Syntax.StringType() }; //in 4.x API syntax this is .TYPE_STRING } ;TYPE_STRING } ;
             return Syntax.commandSyntax(right);
         }
 
@@ -257,7 +258,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueStopThread extends DefaultCommand
     {
         public Syntax getSyntax() {
-            int[] right = { Syntax.TYPE_STRING } ;
+        	int[] right = { Syntax.StringType() }; //in 4.x API syntax this is .TYPE_STRING } ;TYPE_STRING } ;
             return Syntax.commandSyntax(right);
         }
 
@@ -274,22 +275,31 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueAnalogRead extends DefaultReporter
     {
         public Syntax getSyntax() {
-            int ret   = Syntax.TYPE_LIST;
+        	int ret   = Syntax.ListType() ; //in 4.x API syntax this is TYPE_LIST;
             return Syntax.reporterSyntax(ret);
-        };
+        }
 
         public Object report(Argument args[], Context context)
             throws ExtensionException , org.nlogo.api.LogoException
         {
-            LogoList AnaValues = new LogoList();
-            int[] AnaData = controller.getAnalogData();
-            try  {
-                for (int i = 0; i < 6; i++) {
-                    AnaValues.add(Double.valueOf(AnaData[i]));
-                }
-
-                return new org.nlogo.api.LogoList( AnaValues ) ;
-            }
+        	LogoListBuilder lb = new LogoListBuilder();
+        	int[] AnaData = controller.getAnalogData();
+        	try  {
+        		for (int i = 0; i < 6; i++) {
+        			lb.add(Double.valueOf(AnaData[i]));
+        		}
+        		return lb.toLogoList() ;
+        	}
+//			  IN 4.x API syntax, this is the following....
+//            LogoList AnaValues = new LogoList();
+//            int[] AnaData = controller.getAnalogData();
+//            try  {
+//                for (int i = 0; i < 6; i++) {
+//                    AnaValues.add(Double.valueOf(AnaData[i]));
+//                }
+//
+//                return new org.nlogo.api.LogoList( AnaValues ) ;
+//            }
             catch ( java.lang.NoClassDefFoundError e )
             {
                 throw new ExtensionException("error message: " + e.getLocalizedMessage() ) ;
@@ -302,22 +312,32 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     public static class arddueDigitalRead extends DefaultReporter
     {
         public Syntax getSyntax() {
-            int ret   = Syntax.TYPE_LIST;
+        	int ret   = Syntax.ListType(); //in 4.x API syntax, this is TYPE_LIST;
             return Syntax.reporterSyntax(ret);
         }
 
         public Object report(Argument args[], Context context)
             throws ExtensionException , org.nlogo.api.LogoException
         {
-            LogoList DigValues = new LogoList();
+        	LogoListBuilder dvals = new LogoListBuilder();
             int[] DigData = controller.getDigitalData();
             try  {
                 for (int i = 0; i < 6; i++) {
-                    DigValues.add(Double.valueOf(DigData[i]));
+                    dvals.add(Double.valueOf(DigData[i]));
                 }
 
-                return new org.nlogo.api.LogoList(DigValues) ;
+                return dvals.toLogoList() ;
             }
+//			in 4.x API syntax this is:            
+//            LogoList DigValues = new LogoList();
+//            int[] DigData = controller.getDigitalData();
+//            try  {
+//                for (int i = 0; i < 6; i++) {
+//                    DigValues.add(Double.valueOf(DigData[i]));
+//                }
+//
+//                return new org.nlogo.api.LogoList(DigValues) ;
+//            }
             catch ( java.lang.NoClassDefFoundError e )
             {
                 throw new ExtensionException("error message: " + e.getLocalizedMessage() ) ;
@@ -333,7 +353,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
     {
 
         public Syntax getSyntax() {
-            int[] right = {Syntax.TYPE_LIST}  ;
+        	int[] right = {Syntax.ListType() }; //in 4.x API syntax, this is TYPE_LIST }  ;
             return Syntax.commandSyntax(right);
         }
 
@@ -354,7 +374,7 @@ public class arddueExtension extends org.nlogo.api.DefaultClassManager
 public static class arddueConfig extends DefaultCommand
     {
         public Syntax getSyntax() {
-            int[] right = { Syntax.TYPE_STRING } ;
+        	int[] right = { Syntax.StringType() }; //in 4.x API syntax, this is TYPE_STRING } ;
             return Syntax.commandSyntax(right);
         }
 
