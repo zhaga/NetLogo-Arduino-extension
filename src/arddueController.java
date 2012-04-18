@@ -1,4 +1,4 @@
-package edu.nwu.ccl.nlogo.extensions.arddue;
+package netlogo.arduino;
 
 import java.io.*;//InputStream;
 import java.util.Enumeration;

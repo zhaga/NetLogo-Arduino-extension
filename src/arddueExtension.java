@@ -1,4 +1,4 @@
-package edu.nwu.ccl.nlogo.extensions.arddue;
+package netlogo.arduino;
 
 /** (c) 2004 Uri Wilensky. See README.txt for terms of use. **/
 
