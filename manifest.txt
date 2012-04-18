@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Extension-Name: arddue
-Class-Manager: netlogo.arddueExtension
+Extension-Name: arduino
+Class-Manager: netlogo.arduino.arddueExtension
 NetLogo-Extension-API-Version: 5.0
